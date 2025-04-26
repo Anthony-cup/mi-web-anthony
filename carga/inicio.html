@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrusel 3D con Selección de Imágenes</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="scene">
+    <div class="glow"></div>
+    <div class="center-image-container" id="centerContainer">
+      <div class="center-image" id="centerImage">
+        <img src="/api/placeholder/150/150" alt="Imagen Central" id="centerImg">
+        <div class="image-number" id="centerNumber">Central</div>
+      </div>
+    </div>
+    
+    <div class="carousel" id="carousel"></div>
+    
+    <!-- Contenedor para elementos animados durante el intercambio -->
+    <div class="swap-container" id="swapContainer"></div>
+
+    <div class="controls">
+      <button id="settingsBtn">⚙️ Configuraciones</button>
+      <div class="settings-menu" id="settingsMenu">
+        <div class="controls">
+          <button id="pauseBtn">Pausar</button>
+          <button id="resumeBtn">Continuar</button>
+          <button id="reverseBtn">Invertir</button>
+          <button id="swapBtn">Intercambio ON/OFF</button>
+        </div>
+      <!-- Botones de control -->
+   
+      
+      <div class="status-indicator" id="statusIndicator">Estado: Girando</div>
+      <div class="selection-message" id="selectionMessage">Imagen seleccionada</div>
+    </div>
+    </div>
+    
+    <div class="status-indicator" id="statusIndicator">Estado: Girando</div>
+    <div class="selection-message" id="selectionMessage">Imagen seleccionada</div>
+  </div>
+
+  <script>
+    const carousel = document.getElementById('carousel');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const resumeBtn = document.getElementById('resumeBtn');
+    const reverseBtn = document.getElementById('reverseBtn');
+    const swapBtn = document.getElementById('swapBtn');
+    const statusIndicator = document.getElementById('statusIndicator');
+    const selectionMessage = document.getElementById('selectionMessage');
+    const centerContainer = document.getElementById('centerContainer');
+    const centerImage = document.getElementById('centerImage');
+    const centerImg = document.getElementById('centerImg');
+    const centerNumber = document.getElementById('centerNumber');
+    const swapContainer = document.getElementById('swapContainer');
+    
+  
+    
+    const centralImagePath = "img/7.jpg";
+
+// Rutas individuales para cada imagen del carrusel
+const imagePaths = [
+  "img/2.jpg",
+  "img/3.jpg",
+  "img/4.jpg",
+  "img/5.jpg",
+  "img/6.jpg",
+  "img/7.jpg",
+  "img/8.jpg",
+  "img/9.jpg"
+];
+
+// Arrays para almacenar referencias a elementos y datos
+const items = [];
+const images = [];
+const numbers = [];
+
+// Crear y añadir las 8 imágenes
+for (let i = 0; i < imagePaths.length; i++) {
+  const item = document.createElement('div');
+  item.className = 'carousel-item';
+  item.setAttribute('data-index', i);
+
+  const img = document.createElement('img');
+  img.src = imagePaths[i];  // Usar las rutas definidas
+  img.alt = `Imagen ${i + 1}`;
+
+  // Mostrar error si una imagen no carga
+  img.onerror = () => {
+    console.error(`⚠️ No se pudo cargar la imagen: ${img.src}`);
+    img.alt = "Imagen no encontrada";
+    img.style.border = "2px solid red";
+  };
+
+  const number = document.createElement('div');
+  number.className = 'image-number';
+  number.textContent = i + 1;
+
+  item.appendChild(img);
+  item.appendChild(number);
+  carousel.appendChild(item);
+
+  // Agregar evento de clic a cada elemento del carrusel
+  item.addEventListener('click', function () {
+    if (currentlySwapping) return;
+
+    const index = parseInt(this.getAttribute('data-index'));
+    selectCarouselItem(index);
+  });
+
+  // Guardar referencias
+  items.push(item);
+  images.push(img);
+  numbers.push(number);
+}
+
+// Variables de control
+let currentlySwapping = false;
+let enableSwapping = true;
+let selectedIndex = null;
+
+// Colocar las imágenes en posición circular en 3D
+const radius = 200; // Radio del círculo
+const angleStep = (2 * Math.PI) / items.length;
+
+function updateCarouselPositions() {
+  items.forEach((item, index) => {
+    const angle = index * angleStep;
+    const x = radius * Math.sin(angle);
+    const z = radius * Math.cos(angle);
+
+    // Posicionar cada elemento en un círculo 3D
+    item.style.transform = `translateX(${x}px) translateZ(${z}px) rotateY(${angle * (180 / Math.PI)}deg)`;
+  });
+}
+
+    updateCarouselPositions();
+    
+    let isAnimating = true;
+    let direction = 1;
+    let rotationDegree = 0;
+    let animationFrameId = null;
+    let swapTimeout = null;
+    
+    function animate() {
+      if (isAnimating && !currentlySwapping) {
+        rotationDegree += 0.5 * direction;
+        carousel.style.transform = `rotateY(${rotationDegree}deg)`;
+      }
+      animationFrameId = requestAnimationFrame(animate);
+    }
+    
+    // Función para seleccionar una imagen por clic
+    function selectCarouselItem(index) {
+      // Si ya está intercambiando, ignorar
+      if (currentlySwapping) return;
+      
+      // Limpiar cualquier intercambio automático programado
+      if (swapTimeout) {
+        clearTimeout(swapTimeout);
+      }
+      
+      // Guardar el índice seleccionado
+      selectedIndex = index;
+      
+      // Mostrar mensaje de selección
+      selectionMessage.textContent = `Seleccionada: Imagen ${index + 1}`;
+      selectionMessage.style.opacity = '1';
+      
+      // Ocultar mensaje después de 2 segundos
+      setTimeout(() => {
+        selectionMessage.style.opacity = '0';
+      }, 2000);
+      
+      // Marcar visualmente el elemento seleccionado
+      items.forEach(item => item.classList.remove('selected'));
+      items[index].classList.add('selected');
+      
+      // Alinear el carrusel a la imagen seleccionada
+      alignToSelectedItem(index);
+    }
+    
+    // Función para alinear el carrusel a un elemento específico
+    function alignToSelectedItem(index) {
+      // Marcar que estamos en proceso de intercambio
+      currentlySwapping = true;
+      statusIndicator.textContent = "Estado: Alineando";
+      
+      // Calcular el ángulo objetivo para el índice seleccionado
+      const targetDegree = -index * 60;
+      
+      // Calcular la rotación más corta
+      let diffDegree = targetDegree - rotationDegree;
+      
+      // Normalizar a +-180 grados para tomar el camino más corto
+      while (diffDegree > 180) diffDegree -= 360;
+      while (diffDegree < -180) diffDegree += 360;
+      
+      const startRotation = rotationDegree;
+      const endRotation = rotationDegree + diffDegree;
+      const duration = 800; // ms
+      const startTime = performance.now();
+      
+      function alignAnimation(timestamp) {
+        const elapsed = timestamp - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeProgress = 0.5 - Math.cos(progress * Math.PI) / 2; // Easing
+        
+        rotationDegree = startRotation + (endRotation - startRotation) * easeProgress;
+        carousel.style.transform = `rotateY(${rotationDegree}deg)`;
+        
+        if (progress < 1) {
+          requestAnimationFrame(alignAnimation);
+        } else {
+          // Una vez alineado, realizar el intercambio
+          performSmoothExchange(index);
+        }
+      }
+      
+      requestAnimationFrame(alignAnimation);
+    }
+    
+    // Función para intercambiar imágenes con pausa de carrusel
+    function swapImages() {
+      if (!enableSwapping || currentlySwapping) return;
+      
+      // Marcar que estamos en proceso de intercambio
+      currentlySwapping = true;
+      statusIndicator.textContent = "Estado: Intercambiando";
+      
+      // Calcular qué imagen está en frente
+      const frontIndex = Math.round((-rotationDegree / 60) % 6);
+      const adjustedIndex = frontIndex < 0 ? (frontIndex + 6) % 6 : frontIndex % 6;
+      
+      // Realizar intercambio con el elemento frontal
+      alignToSelectedItem(adjustedIndex);
+    }
+    
+    function performSmoothExchange(index) {
+      // Limpiar el contenedor de intercambio
+      swapContainer.innerHTML = '';
+      
+      statusIndicator.textContent = "Estado: Intercambiando";
+      
+      // Obtener la posición y tamaño del elemento seleccionado
+      const selectedItem = items[index];
+      const selectedRect = selectedItem.getBoundingClientRect();
+      const centerRect = centerImage.getBoundingClientRect();
+      
+      // Crear un elemento para animar desde el carrusel al centro
+      const fromCarouselToCenter = document.createElement('div');
+      fromCarouselToCenter.className = 'swap-item';
+      fromCarouselToCenter.style.width = `${selectedRect.width}px`;
+      fromCarouselToCenter.style.height = `${selectedRect.height}px`;
+      fromCarouselToCenter.style.top = `${selectedRect.top}px`;
+      fromCarouselToCenter.style.left = `${selectedRect.left}px`;
+      
+      // Añadir imagen al elemento animado
+      const img1 = document.createElement('img');
+      img1.src = images[index].src;
+      img1.alt = 'Animación 1';
+      fromCarouselToCenter.appendChild(img1);
+      
+      // Añadir número al elemento animado
+      const num1 = document.createElement('div');
+      num1.className = 'swap-number';
+      num1.textContent = numbers[index].textContent;
+      fromCarouselToCenter.appendChild(num1);
+      
+      // Crear un elemento para animar desde el centro al carrusel
+      const fromCenterToCarousel = document.createElement('div');
+      fromCenterToCarousel.className = 'swap-item';
+      fromCenterToCarousel.style.width = `${centerRect.width}px`;
+      fromCenterToCarousel.style.height = `${centerRect.height}px`;
+      fromCenterToCarousel.style.top = `${centerRect.top}px`;
+      fromCenterToCarousel.style.left = `${centerRect.left}px`;
+      
+      // Añadir imagen al elemento animado
+      const img2 = document.createElement('img');
+      img2.src = centerImg.src;
+      img2.alt = 'Animación 2';
+      fromCenterToCarousel.appendChild(img2);
+      
+      // Añadir número al elemento animado
+      const num2 = document.createElement('div');
+      num2.className = 'swap-number';
+      num2.textContent = centerNumber.textContent;
+      fromCenterToCarousel.appendChild(num2);
+      
+      // Añadir elementos al contenedor
+      swapContainer.appendChild(fromCarouselToCenter);
+      swapContainer.appendChild(fromCenterToCarousel);
+      
+      // Ocultar temporalmente los elementos originales
+      selectedItem.style.opacity = '0';
+      centerImage.style.opacity = '0';
+      
+      // Iniciar la animación después de un pequeño retraso
+      setTimeout(() => {
+        fromCarouselToCenter.style.width = `${centerRect.width}px`;
+        fromCarouselToCenter.style.height = `${centerRect.height}px`;
+        fromCarouselToCenter.style.top = `${centerRect.top}px`;
+        fromCarouselToCenter.style.left = `${centerRect.left}px`;
+        
+        fromCenterToCarousel.style.width = `${selectedRect.width}px`;
+        fromCenterToCarousel.style.height = `${selectedRect.height}px`;
+        fromCenterToCarousel.style.top = `${selectedRect.top}px`;
+        fromCenterToCarousel.style.left = `${selectedRect.left}px`;
+      }, 50);
+      
+      // Después de completar la animación, actualizar los elementos originales
+      setTimeout(() => {
+        // Intercambiar las imágenes y números
+        const tempSrc = centerImg.src;
+        const tempNumber = centerNumber.textContent;
+        
+        centerImg.src = images[index].src;
+        centerNumber.textContent = numbers[index].textContent;
+        
+        images[index].src = tempSrc;
+        numbers[index].textContent = tempNumber;
+        
+        // Mostrar nuevamente los elementos originales
+        selectedItem.style.opacity = '1';
+        centerImage.style.opacity = '1';
+        
+        // Quitar clase de selección
+        selectedItem.classList.remove('selected');
+        
+        // Limpiar el contenedor de animación
+        swapContainer.innerHTML = '';
+        
+        // Marcar que el intercambio ha terminado
+        currentlySwapping = false;
+        statusIndicator.textContent = "Estado: Girando";
+        selectedIndex = null;
+        
+        // Programar el próximo intercambio automático si está habilitado
+        if (enableSwapping) {
+          swapTimeout = setTimeout(swapImages, 5000);
+        }
+      }, 1000);
+    }
+    
+    function startSwapping() {
+      if (swapTimeout) clearTimeout(swapTimeout);
+      swapTimeout = setTimeout(swapImages, 5000);
+    }
+    
+    // Manejadores de eventos para los botones
+    pauseBtn.addEventListener('click', () => {
+      isAnimating = false;
+      statusIndicator.textContent = "Estado: Pausado";
+    });
+    
+    resumeBtn.addEventListener('click', () => {
+      isAnimating = true;
+      statusIndicator.textContent = "Estado: Girando";
+    });
+    
+    reverseBtn.addEventListener('click', () => {
+      direction *= -1;
+      statusIndicator.textContent = `Estado: Girando (${direction > 0 ? 'Derecha' : 'Izquierda'})`;
+    });
+    
+    swapBtn.addEventListener('click', () => {
+      enableSwapping = !enableSwapping;
+      if (enableSwapping) {
+        swapBtn.textContent = "Intercambio ON";
+        statusIndicator.textContent = "Estado: Girando (Intercambio ON)";
+        startSwapping();
+      } else {
+        swapBtn.textContent = "Intercambio OFF";
+        statusIndicator.textContent = "Estado: Girando (Intercambio OFF)";
+        if (swapTimeout) clearTimeout(swapTimeout);
+      }
+    });
+    
+    // Iniciar la animación
+    animate();
+    
+    // Iniciar el intercambio automático si está habilitado
+    if (enableSwapping) {
+      startSwapping();
+    }
+
+
+  </script>
+<script>
+
+    // Obtención de elementos
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsMenu = document.getElementById('settingsMenu');
+
+    // Función para alternar el menú deslizable
+    settingsBtn.addEventListener('click', function() {
+      settingsMenu.classList.toggle('show');
+    });
+
+    // Otros scripts previos aquí...
+  </script>
+</script>
+</body>
+</html>

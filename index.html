@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barra de Carga Romántica con Luces LED</title>
+    <link rel="stylesheet" href="index.css">
+    <style>
+    
+        #loadingPanel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            visibility: hidden; 
+        }
+
+
+        #contentPanel {
+            display: none; 
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            z-index: 10000;
+        }
+
+
+        #startButton {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            font-size: 18px;
+            background-color: #ff3366;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            z-index: 10000; 
+        }
+
+      
+        .heart {
+            position: absolute;
+            font-size: 2rem;
+            animation: heartAnimation 3s infinite;
+        }
+
+        @keyframes heartAnimation {
+            0% { transform: translateY(0); opacity: 1; }
+            50% { transform: translateY(-100px); opacity: 0.5; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .led {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: ledAnimation 3s infinite;
+        }
+
+        @keyframes ledAnimation {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+    </style>
+</head>
+<body>
+   
+    <button id="startButton">Iniciar Música y Carga</button>
+
+    <div id="loadingPanel">
+        <div class="container">
+            <div class="border-decoration"></div>
+            <h1 class="title">✨ Cargando... ❤️ ✨</h1>
+            
+            <div class="loading-bar-container">
+                <div class="loading-bar" id="loadingBar">
+                    <span class="emoji" style="left: 10%;">💕</span>
+                    <span class="emoji" style="left: 30%;">💘</span>
+                    <span class="emoji" style="left: 50%;">💖</span>
+                    <span class="emoji" style="left: 70%;">💗</span>
+                    <span class="emoji" style="left: 90%;">💓</span>
+                </div>
+                <div class="percentage" id="percentage">0%</div>
+            </div>
+
+            <div class="message">¡Carga completa!  ❤️</div>
+            
+            <div class="emoji-container">
+                💕 💘 💖 💗 💓 💝 💞 💌 🌹 ✨
+            </div>
+        </div>
+    </div>
+
+  
+    <div id="contentPanel">
+        <iframe id="contentFrame" src="inicio/inicio.html" width="100%" height="100%" style="border:none;"></iframe>
+    </div>
+
+    <div class="hearts" id="hearts"></div>
+    <div class="led-lights" id="ledLights"></div>
+
+    <script>
+        const audio = new Audio('inicio/mus/1.mp3');
+        const startButton = document.getElementById('startButton');
+        const loadingPanel = document.getElementById('loadingPanel');
+        const contentPanel = document.getElementById('contentPanel');
+        const loadingBar = document.getElementById("loadingBar");
+        const percentage = document.getElementById("percentage");
+        const duration = 5000;
+        const interval = 50;
+        let progress = 0;
+        const increment = 100 / (duration / interval);
+
+     
+        startButton.addEventListener('click', () => {
+     
+            audio.play(); 
+            startButton.style.display = 'none'; 
+            loadingPanel.style.visibility = 'visible'; 
+
+
+            const updateProgress = setInterval(() => {
+                progress += increment;
+                if (progress > 100) progress = 100;
+                loadingBar.style.width = `${progress}%`;
+                percentage.textContent = `${Math.round(progress)}%`;
+
+                let color = `rgb(${Math.min(progress * 2.55, 255)}, 0, ${255 - Math.min(progress * 2.55, 255)})`;
+                loadingBar.style.backgroundColor = color;
+
+                if (progress >= 100) {
+                    clearInterval(updateProgress);
+                    setTimeout(() => {
+                        loadingPanel.style.visibility = 'hidden'; 
+                        contentPanel.style.display = 'block'; 
+                    }, 800);
+                }
+            }, interval);
+        });
+
+      
+        const heartsContainer = document.getElementById("hearts");
+        const heartSymbols = ["❤️", "💕", "💘", "💖", "💗", "💓", "💝", "💞", "♥️", "💟"];
+        for (let i = 0; i < 50; i++) {
+            const heart = document.createElement("div");
+            heart.className = "heart";
+            heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+            heart.style.left = `${Math.random() * 100}%`;
+            heart.style.animationDelay = `${Math.random() * 6}s`;
+            heart.style.animationDuration = `${3 + Math.random() * 7}s`;
+            heart.style.fontSize = `${0.8 + Math.random() * 1.5}rem`;
+            heartsContainer.appendChild(heart);
+        }
+
+     
+        const ledLights = document.getElementById("ledLights");
+        for (let i = 0; i < 30; i++) {
+            const led = document.createElement("div");
+            led.className = "led";
+            led.style.left = `${Math.random() * 100}%`;
+            led.style.top = `${Math.random() * 100}%`;
+            const colors = ["#ff2d95", "#ff9de6", "#ff3366", "#ff66b2", "#ff0055"];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            led.style.backgroundColor = color;
+            led.style.boxShadow = `0 0 15px 5px ${color}`;
+            led.style.animationDelay = `${Math.random() * 2}s`;
+            led.style.animationDuration = `${1 + Math.random() * 3}s`;
+            ledLights.appendChild(led);
+        }
+    </script>
+</body>
+</html>
