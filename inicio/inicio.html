@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Página Romántica</title>
+  <title>Mensaje Personalizado</title>
   <style>
     * {
       margin: 0;
@@ -44,14 +44,8 @@
     }
     
     @keyframes twinkle {
-      0%, 100% {
-        opacity: var(--opacity);
-        transform: scale(1);
-      }
-      50% {
-        opacity: var(--max-opacity);
-        transform: scale(1.2);
-      }
+      0%, 100% { opacity: var(--opacity); transform: scale(1); }
+      50% { opacity: var(--max-opacity); transform: scale(1.2); }
     }
     
     .light {
@@ -99,18 +93,10 @@
     }
     
     @keyframes floatLight {
-      0%, 100% {
-        transform: translateY(0) translateX(0) scale(1);
-      }
-      25% {
-        transform: translateY(-20px) translateX(20px) scale(1.1);
-      }
-      50% {
-        transform: translateY(15px) translateX(-15px) scale(0.95);
-      }
-      75% {
-        transform: translateY(-10px) translateX(-20px) scale(1.05);
-      }
+      0%, 100% { transform: translateY(0) translateX(0) scale(1); }
+      25% { transform: translateY(-20px) translateX(20px) scale(1.1); }
+      50% { transform: translateY(15px) translateX(-15px) scale(0.95); }
+      75% { transform: translateY(-10px) translateX(-20px) scale(1.05); }
     }
     
     .container {
@@ -120,8 +106,24 @@
       width: 100%;
       height: 100%;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
+      gap: 20px;
+    }
+    
+    .title {
+      font-family: 'Dancing Script', cursive;
+      font-size: 28px;
+      color: #ff5e87;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     
     .cuadro-central {
@@ -144,18 +146,10 @@
     }
     
     @keyframes floatCard {
-      0%, 100% {
-        transform: translateY(0) rotateX(0deg) rotateY(0deg);
-      }
-      25% {
-        transform: translateY(-10px) rotateX(2deg) rotateY(-2deg);
-      }
-      50% {
-        transform: translateY(5px) rotateX(-1deg) rotateY(1deg);
-      }
-      75% {
-        transform: translateY(-5px) rotateX(1deg) rotateY(-1deg);
-      }
+      0%, 100% { transform: translateY(0) rotateX(0deg) rotateY(0deg); }
+      25% { transform: translateY(-10px) rotateX(2deg) rotateY(-2deg); }
+      50% { transform: translateY(5px) rotateX(-1deg) rotateY(1deg); }
+      75% { transform: translateY(-5px) rotateX(1deg) rotateY(-1deg); }
     }
     
     .cuadro-central:hover {
@@ -198,21 +192,6 @@
       max-width: 400px;
       border: 1px solid rgba(255, 255, 255, 0.1);
       overflow: hidden;
-      animation: none;
-    }
-    
-    @keyframes panelEntrance {
-      0% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.7) translateY(20px);
-      }
-      60% {
-        transform: translate(-50%, -50%) scale(1.05) translateY(-5px);
-      }
-      100% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1) translateY(0);
-      }
     }
     
     .panel-texto.visible {
@@ -220,6 +199,12 @@
       visibility: visible;
       display: block;
       animation: panelEntrance 0.8s forwards cubic-bezier(0.26, 1.32, 0.46, 0.99);
+    }
+    
+    @keyframes panelEntrance {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.7) translateY(20px); }
+      60% { transform: translate(-50%, -50%) scale(1.05) translateY(-5px); }
+      100% { opacity: 1; transform: translate(-50%, -50%) scale(1) translateY(0); }
     }
     
     .panel-texto::before {
@@ -240,12 +225,8 @@
     }
     
     @keyframes shine {
-      0% {
-        transform: translateX(-100%) rotate(45deg);
-      }
-      100% {
-        transform: translateX(100%) rotate(45deg);
-      }
+      0% { transform: translateX(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) rotate(45deg); }
     }
     
     #frase {
@@ -263,9 +244,7 @@
     }
     
     @media (min-width: 768px) {
-      #frase {
-        font-size: 24px;
-      }
+      #frase { font-size: 24px; }
     }
     
     .panel-texto.visible #frase {
@@ -284,21 +263,11 @@
     }
     
     @keyframes heartBeat {
-      0% {
-        transform: translateX(-50%) scale(1);
-      }
-      14% {
-        transform: translateX(-50%) scale(1.3);
-      }
-      28% {
-        transform: translateX(-50%) scale(1);
-      }
-      42% {
-        transform: translateX(-50%) scale(1.3);
-      }
-      70% {
-        transform: translateX(-50%) scale(1);
-      }
+      0% { transform: translateX(-50%) scale(1); }
+      14% { transform: translateX(-50%) scale(1.3); }
+      28% { transform: translateX(-50%) scale(1); }
+      42% { transform: translateX(-50%) scale(1.3); }
+      70% { transform: translateX(-50%) scale(1); }
     }
     
     .corazones-container {
@@ -321,17 +290,9 @@
     }
     
     @keyframes floatHeart {
-      0% {
-        transform: translateY(0) scale(0.8) rotate(0deg);
-        opacity: 0;
-      }
-      20% {
-        opacity: 0.9;
-      }
-      100% {
-        transform: translateY(calc(-100vh * var(--velocidad))) scale(var(--escala-final)) rotate(var(--rotacion));
-        opacity: 0;
-      }
+      0% { transform: translateY(0) scale(0.8) rotate(0deg); opacity: 0; }
+      20% { opacity: 0.9; }
+      100% { transform: translateY(calc(-100vh * var(--velocidad))) scale(var(--escala-final)) rotate(var(--rotacion)); opacity: 0; }
     }
     
     .cerrar-panel {
@@ -399,14 +360,8 @@
     }
     
     @keyframes ripple {
-      0% {
-        transform: scale(0);
-        opacity: 0.7;
-      }
-      100% {
-        transform: scale(4);
-        opacity: 0;
-      }
+      0% { transform: scale(0); opacity: 0.7; }
+      100% { transform: scale(4); opacity: 0; }
     }
     
     .floating-letters {
@@ -421,17 +376,65 @@
     }
     
     @keyframes floatText {
-      0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 0;
-      }
-      10% {
-        opacity: 0.3;
-      }
-      100% {
-        transform: translateY(-100vh) rotate(var(--rotate-amount));
-        opacity: 0;
-      }
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.3; }
+      100% { transform: translateY(-100vh) rotate(var(--rotate-amount)); opacity: 0; }
+    }
+    
+    .error {
+      color: #ff5e87;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 20px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+    
+    .input-container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      max-width: 400px;
+      width: 85%;
+      animation: fadeIn 1s ease-in-out;
+    }
+    
+    .input-container input {
+      padding: 10px;
+      width: 100%;
+      margin-bottom: 10px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+    
+    .input-container input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .input-container button {
+      padding: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      background-color: #ff4e7a;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .input-container button:hover {
+      background-color: #e83765;
+    }
+    
+    .hidden {
+      display: none;
     }
   </style>
 </head>
@@ -446,13 +449,19 @@
   <div id="floating-letters-container"></div>
   
   <div class="container">
-    <div class="ribbon">
+    <div class="input-container" id="inputContainer">
+      <h2>🔐 Ingresa tu usuario o ID</h2>
+      <input type="text" id="userInput" placeholder="Usuario o ID">
+      <button onclick="verMensaje()">Ver mensaje</button>
+    </div>
+    <div class="title hidden" id="titulo"></div>
+    <div class="ribbon hidden">
       <span class="ribbon-content">Para ti ♥</span>
     </div>
     
-    <div class="cuadro-central">
+    <div class="cuadro-central hidden" id="cuadroCentral">
       <div class="image-click-effect" id="click-effect"></div>
-      <img src="img/1.jpg" alt="Imagen central" id="imagen-carta">
+      <img src="https://via.placeholder.com/500?text=Imagen+1" alt="Imagen central" id="imagen-carta">
       <div class="panel-texto" id="panel-mensaje">
         <button class="cerrar-panel" id="cerrar">×</button>
         <p id="frase"></p>
@@ -460,23 +469,42 @@
     </div>
     
     <div class="corazones-container" id="corazones-container"></div>
+    <div id="error" class="error"></div>
   </div>
   
-  <audio id="musica-fondo" loop autoplay>
-    <source src="musica.mp3" type="audio/mpeg">
-  </audio>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
   
   <script>
+    // Configuración Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyAvXX3WmnXH36z0JPh3rXul0NFnslCQLlI",
+      authDomain: "ling-personaizado.firebaseapp.com",
+      projectId: "ling-personaizado",
+      storageBucket: "ling-personaizado.appspot.com",
+      messagingSenderId: "87311498492",
+      appId: "1:87311498492:web:d6d42825a1ab57c918ab79",
+      measurementId: "G-DHQHGWYC6S",
+      databaseURL: "https://ling-personaizado-default-rtdb.firebaseio.com/"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
     const imagen = document.getElementById('imagen-carta');
     const panel = document.getElementById('panel-mensaje');
     const fraseElemento = document.getElementById('frase');
-    const musica = document.getElementById('musica-fondo');
     const cerrarPanel = document.getElementById('cerrar');
     const corazonesContainer = document.getElementById('corazones-container');
     const clickEffect = document.getElementById('click-effect');
     const starsContainer = document.getElementById('stars');
     const ribbon = document.querySelector('.ribbon');
     const floatingLettersContainer = document.getElementById('floating-letters-container');
+    const titulo = document.getElementById('titulo');
+    const errorDiv = document.getElementById('error');
+    const inputContainer = document.getElementById('inputContainer');
+    const cuadroCentral = document.getElementById('cuadroCentral');
     
     const palabrasRomanticas = [
       'amor', 'cariño', 'ternura', 'pasión', 'dulzura',
@@ -484,58 +512,44 @@
       'abrazo', 'beso', 'caricia', 'suspiro', 'mirada'
     ];
     
-    const frases = [
-      "Te escribo sin saber si lo leerás,\npero mi corazón ya no aguantó más,\nle pregunté si quería estar tranquilo,\ny me dijo \"solo si estoy contigo...🥺\".",
-    ];
-    
     function createStars() {
       for (let i = 0; i < 100; i++) {
         const star = document.createElement('div');
         star.classList.add('star');
-        
         const size = Math.random() * 2 + 1;
         star.style.width = `${size}px`;
         star.style.height = `${size}px`;
-        
         const x = Math.random() * 100;
         const y = Math.random() * 100;
         star.style.left = `${x}%`;
         star.style.top = `${y}%`;
-        
         const duration = Math.random() * 3 + 2;
         const opacity = Math.random() * 0.5 + 0.3;
         const maxOpacity = Math.min(opacity + 0.3, 1);
-        
         star.style.setProperty('--duration', `${duration}s`);
         star.style.setProperty('--opacity', opacity);
         star.style.setProperty('--max-opacity', maxOpacity);
-        
         starsContainer.appendChild(star);
       }
     }
     
     function createFloatingHearts() {
       corazonesContainer.innerHTML = '';
-      
       for (let i = 0; i < 15; i++) {
         const heart = document.createElement('div');
         heart.classList.add('corazon');
         heart.innerHTML = '❤';
-        
         heart.style.left = `${Math.random() * 100}%`;
         heart.style.top = `${Math.random() * 100}%`;
         heart.style.fontSize = `${Math.random() * 12 + 12}px`;
-        
         const duracion = Math.random() * 10 + 10;
         const velocidad = Math.random() * 0.5 + 0.5;
         const escalaFinal = Math.random() * 0.5 + 0.3;
         const rotacion = `${Math.random() * 360}deg`;
-        
         heart.style.setProperty('--duracion', `${duracion}s`);
         heart.style.setProperty('--velocidad', velocidad);
         heart.style.setProperty('--escala-final', escalaFinal);
         heart.style.setProperty('--rotacion', rotacion);
-        
         corazonesContainer.appendChild(heart);
       }
     }
@@ -545,22 +559,16 @@
         setTimeout(() => {
           const letter = document.createElement('div');
           letter.classList.add('floating-letters');
-          
           const palabra = palabrasRomanticas[Math.floor(Math.random() * palabrasRomanticas.length)];
           letter.textContent = palabra;
-          
           letter.style.left = `${Math.random() * 90 + 5}%`;
           letter.style.bottom = '-20px';
           letter.style.opacity = '0';
-          
           const floatDuration = Math.random() * 30 + 30;
           const rotateAmount = `${Math.random() * 40 - 20}deg`;
-          
           letter.style.setProperty('--float-duration', `${floatDuration}s`);
           letter.style.setProperty('--rotate-amount', rotateAmount);
-          
           floatingLettersContainer.appendChild(letter);
-          
           setTimeout(() => {
             if (letter && letter.parentNode) {
               letter.parentNode.removeChild(letter);
@@ -574,13 +582,10 @@
       const rect = imagen.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      
       clickEffect.style.left = `${x}px`;
       clickEffect.style.top = `${y}px`;
       clickEffect.style.animation = 'none';
-      
       void clickEffect.offsetWidth;
-      
       clickEffect.style.animation = 'ripple 1s forwards cubic-bezier(0.22, 1, 0.36, 1)';
     }
     
@@ -588,7 +593,6 @@
       const rect = imagen.getBoundingClientRect();
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      
       for (let i = 0; i < 15; i++) {
         setTimeout(() => {
           const heart = document.createElement('div');
@@ -597,34 +601,20 @@
           heart.style.left = `${centerX}px`;
           heart.style.top = `${centerY}px`;
           heart.style.fontSize = `${Math.random() * 15 + 10}px`;
-          
           const angle = Math.random() * Math.PI * 2;
           const distance = Math.random() * 50 + 30;
           const targetX = centerX + Math.cos(angle) * distance;
           const targetY = centerY + Math.sin(angle) * distance;
-          
           heart.animate([
-            { 
-              transform: 'scale(0.3) translate(0, 0)', 
-              opacity: 0 
-            },
-            { 
-              transform: `scale(1) translate(${targetX - centerX}px, ${targetY - centerY}px)`, 
-              opacity: 0.9,
-              offset: 0.6
-            },
-            { 
-              transform: `scale(0.5) translate(${targetX - centerX}px, ${targetY - centerY - 50}px)`,
-              opacity: 0
-            }
+            { transform: 'scale(0.3) translate(0, 0)', opacity: 0 },
+            { transform: `scale(1) translate(${targetX - centerX}px, ${targetY - centerY}px)`, opacity: 0.9, offset: 0.6 },
+            { transform: `scale(0.5) translate(${targetX - centerX}px, ${targetY - centerY - 50}px)`, opacity: 0 }
           ], {
             duration: 1200,
             easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
             fill: 'forwards'
           });
-          
           corazonesContainer.appendChild(heart);
-          
           setTimeout(() => {
             if (heart.parentNode) {
               heart.parentNode.removeChild(heart);
@@ -634,20 +624,57 @@
       }
     }
     
+    async function verMensaje() {
+      const userId = document.getElementById('userInput').value.trim().toLowerCase();
+      if (!userId) {
+        errorDiv.textContent = "❌ Por favor, ingresa un usuario o ID.";
+        return;
+      }
+      await loadMessage(userId);
+    }
+    
+    async function loadMessage(userId) {
+      errorDiv.textContent = "";
+      try {
+        const ref = database.ref("usuarios/" + userId);
+        const snapshot = await ref.get();
+        if (!snapshot.exists()) {
+          errorDiv.textContent = `❌ El usuario "${userId}" no existe o el mensaje fue eliminado.`;
+          return;
+        }
+        
+        const datos = snapshot.val();
+        titulo.textContent = `Esto te lo dedico para ti de parte de ${datos.nombre}`;
+        fraseElemento.textContent = datos.texto;
+        
+        // Aplicar personalizaciones
+        if (datos.backgroundColor) {
+          panel.style.background = datos.backgroundColor;
+        }
+        if (datos.fontStyle) {
+          fraseElemento.style.fontFamily = datos.fontStyle;
+        }
+        
+        // Mostrar elementos y ocultar formulario
+        inputContainer.classList.add('hidden');
+        titulo.classList.remove('hidden');
+        cuadroCentral.classList.remove('hidden');
+        ribbon.classList.remove('hidden');
+      } catch (error) {
+        console.error(error);
+        errorDiv.textContent = "❌ Error al obtener los datos.";
+      }
+    }
+    
     imagen.addEventListener('click', (e) => {
       showClickEffect(e);
       createBurstHearts();
       imagen.style.transform = 'scale(0.95)';
-      
       setTimeout(() => {
-        imagen.src = 'img/2.jpg';
+        imagen.src = 'https://via.placeholder.com/500?text=Imagen+2';
         imagen.style.transform = '';
         ribbon.style.opacity = '1';
-        
         setTimeout(() => {
-          const fraseIndex = Math.floor(Math.random() * frases.length);
-          const fraseAleatoria = frases[fraseIndex];
-          fraseElemento.innerText = fraseAleatoria;
           panel.classList.add('visible');
         }, 800);
       }, 300);
@@ -655,9 +682,8 @@
     
     cerrarPanel.addEventListener('click', () => {
       panel.classList.remove('visible');
-      
       setTimeout(() => {
-        imagen.src = 'img/1.jpg';
+        imagen.src = 'https://via.placeholder.com/500?text=Imagen+1';
         ribbon.style.opacity = '0';
       }, 500);
     });
@@ -669,9 +695,13 @@
       createFloatingLetters();
       setInterval(createFloatingLetters, 30000);
       
-      musica.play().catch(() => {
-        console.log("La reproducción automática de música fue bloqueada por el navegador");
-      });
+      // Cargar mensaje automáticamente si hay userId en la URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const userId = urlParams.get('user');
+      if (userId) {
+        document.getElementById('userInput').value = userId;
+        verMensaje();
+      }
     });
   </script>
 </body>
