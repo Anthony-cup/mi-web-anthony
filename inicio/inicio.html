@@ -461,7 +461,7 @@
     
     <div class="cuadro-central hidden" id="cuadroCentral">
       <div class="image-click-effect" id="click-effect"></div>
-      <img src="https://via.placeholder.com/500?text=Imagen+1" alt="Imagen central" id="imagen-carta">
+      <img src="img/1.jpg" alt="Imagen central" id="imagen-carta">
       <div class="panel-texto" id="panel-mensaje">
         <button class="cerrar-panel" id="cerrar">×</button>
         <p id="frase"></p>
@@ -471,6 +471,10 @@
     <div class="corazones-container" id="corazones-container"></div>
     <div id="error" class="error"></div>
   </div>
+  
+  <audio id="musica-fondo" loop autoplay>
+    <source src="musica.mp3" type="audio/mpeg">
+  </audio>
   
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -495,6 +499,7 @@
     const imagen = document.getElementById('imagen-carta');
     const panel = document.getElementById('panel-mensaje');
     const fraseElemento = document.getElementById('frase');
+    const musica = document.getElementById('musica-fondo');
     const cerrarPanel = document.getElementById('cerrar');
     const corazonesContainer = document.getElementById('corazones-container');
     const clickEffect = document.getElementById('click-effect');
@@ -671,7 +676,7 @@
       createBurstHearts();
       imagen.style.transform = 'scale(0.95)';
       setTimeout(() => {
-        imagen.src = 'https://via.placeholder.com/500?text=Imagen+2';
+        imagen.src = 'img/2.jpg';
         imagen.style.transform = '';
         ribbon.style.opacity = '1';
         setTimeout(() => {
@@ -683,7 +688,7 @@
     cerrarPanel.addEventListener('click', () => {
       panel.classList.remove('visible');
       setTimeout(() => {
-        imagen.src = 'https://via.placeholder.com/500?text=Imagen+1';
+        imagen.src = 'img/1.jpg';
         ribbon.style.opacity = '0';
       }, 500);
     });
@@ -694,6 +699,10 @@
       setInterval(createFloatingHearts, 15000);
       createFloatingLetters();
       setInterval(createFloatingLetters, 30000);
+      
+      musica.play().catch(() => {
+        console.log("La reproducción automática de música fue bloqueada por el navegador");
+      });
       
       // Cargar mensaje automáticamente si hay userId en la URL
       const urlParams = new URLSearchParams(window.location.search);
